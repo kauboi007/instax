@@ -10,13 +10,11 @@ DATABASE_URL="sqlite+aiosqlite:///./test.db"
 class base(DeclarativeBase):
     pass
 
-class post(base):   
+class Post(base):   
     __tablename__="posts"
     id=Column(UUID(as_uuid=True),primary_key=True,default=uuid.uuid4)
-    caption=Column(Text)
-    url=Column(String,nullable=False)
-    file_type=Column(String,nullable=False)
-    file_name=Column(String,nullable=False)
+    content=Column(Text)
+    title=Column(Text)
     created_on=Column(DateTime, default=lambda: datetime.now(timezone(timedelta(hours=5, minutes=30))))
 
 engine=create_async_engine(DATABASE_URL)
