@@ -5,8 +5,11 @@ from sqlalchemy.dialects.postgresql import  UUID
 from sqlalchemy.ext.asyncio import async_sessionmaker,AsyncSession,create_async_engine
 from sqlalchemy.orm import DeclarativeBase,relationship
 from datetime import datetime,timezone,timedelta
+import os
+from dotenv import load_dotenv
 
-DATABASE_URL="sqlite+aiosqlite:///./test.db"
+DATABASE_URL=os.getenv("DATABASE_URL")
+
 class base(DeclarativeBase):
     pass
 
@@ -15,7 +18,7 @@ class Post(base):
     id=Column(UUID(as_uuid=True),primary_key=True,default=uuid.uuid4)
     content=Column(Text)
     title=Column(Text)
-    created_on=Column(DateTime, default=lambda: datetime.now(timezone(timedelta(hours=5, minutes=30))))
+    created_on=Column(DateTime(timezone=True), default=lambda: datetime.now(timezone(timedelta(hours=5, minutes=30))))
 
 engine=create_async_engine(DATABASE_URL)
 async_session_maker=async_sessionmaker(engine,expire_on_commit=False)

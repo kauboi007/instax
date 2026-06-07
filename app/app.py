@@ -35,3 +35,17 @@ async def feed(session: AsyncSession = Depends(get_session)):
             "created_on": post.created_on.isoformat()
         })
     return {"posts":posts_data}
+
+@app.delete("/posts/{id}")
+async def del_post(id:str,session:AsyncSession=Depends(get_session)):
+    try:
+        post_uuid=uuid.UUID(id)
+        res=await session.execute(select(Post).where(Post.id==post_uuid))
+        post=res.scalars().first()
+        if not post:
+            raise HTTPException(status_code=404,detail="Post not found")
+        await session.delete(post)
+        await session.commit()
+        return {"Success":True,"Message":"deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500,detail=str(e))
