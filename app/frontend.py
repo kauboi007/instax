@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-API = "http://localhost:8000"
+API = "https://instax-l8iy.onrender.com"
 
 st.title("Instax")
 
